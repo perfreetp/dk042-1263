@@ -32,10 +32,12 @@ interface AppState {
   addBrand: (brand: Brand) => void;
   addObservation: (observation: Observation) => void;
   addConclusion: (conclusion: Conclusion) => void;
-  updateConclusionShared: (id: string, sharedWith: string[], viewedCount: number) => void;
+  updateConclusionShared: (id: string, sharedWith: string[], viewedCount: number, shareNote?: string, lastSharedAt?: string) => void;
+  updatePhotoTag: (observationId: string, photoUrl: string, newTag: string) => void;
   getBrandById: (id: string) => Brand | undefined;
   getObservationsByBrandId: (brandId: string) => Observation[];
   getObservationsByRegion: (region: string) => Observation[];
+  getObservationById: (id: string) => Observation | undefined;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -45,14 +47,35 @@ export const useAppStore = create<AppState>((set, get) => ({
   addBrand: (brand) => set((state) => ({ brands: [...state.brands, brand] })),
   addObservation: (observation) => set((state) => ({ observations: [...state.observations, observation] })),
   addConclusion: (conclusion) => set((state) => ({ conclusions: [...state.conclusions, conclusion] })),
-  updateConclusionShared: (id, sharedWith, viewedCount) => {
+  updateConclusionShared: (id, sharedWith, viewedCount, shareNote, lastSharedAt) => {
     set((state) => ({
       conclusions: state.conclusions.map((c) =>
-        c.id === id ? { ...c, sharedWith, viewedCount } : c
+        c.id === id
+          ? {
+              ...c,
+              sharedWith,
+              viewedCount,
+              ...(shareNote !== undefined ? { shareNote } : {}),
+              ...(lastSharedAt !== undefined ? { lastSharedAt } : {}),
+            }
+          : c
+      ),
+    }));
+  },
+  updatePhotoTag: (observationId, photoUrl, newTag) => {
+    set((state) => ({
+      observations: state.observations.map((o) =>
+        o.id === observationId
+          ? {
+              ...o,
+              photos: o.photos.map((p) => (p.url === photoUrl ? { ...p, tag: newTag } : p)),
+            }
+          : o
       ),
     }));
   },
   getBrandById: (id) => get().brands.find((b) => b.id === id),
   getObservationsByBrandId: (brandId) => get().observations.filter((o) => o.brandId === brandId),
   getObservationsByRegion: (region) => get().observations.filter((o) => o.region === region),
+  getObservationById: (id) => get().observations.find((o) => o.id === id),
 }));

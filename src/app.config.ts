@@ -7,6 +7,8 @@ export default defineAppConfig({
     'pages/brand-detail/index',
     'pages/brand-add/index',
     'pages/observation-add/index',
+    'pages/observation-detail/index',
+    'pages/photo-detail/index',
     'pages/compare/index'
   ],
   window: {

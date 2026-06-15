@@ -16,4 +16,6 @@ export interface Conclusion {
   createdAt: string;
   sharedWith: string[];
   viewedCount: number;
+  shareNote?: string;
+  lastSharedAt?: string;
 }

@@ -85,7 +85,11 @@ const BrandDetailPage: React.FC = () => {
           <>
             <Text className={styles.sectionTitle}>观察记录 ({brandObservations.length})</Text>
             {brandObservations.map((obs) => (
-              <ObservationCard key={obs.id} observation={obs} />
+              <ObservationCard
+                key={obs.id}
+                observation={obs}
+                onClick={() => Taro.navigateTo({ url: `/pages/observation-detail/index?id=${obs.id}` })}
+              />
             ))}
           </>
         )}

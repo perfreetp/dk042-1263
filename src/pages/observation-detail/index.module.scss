@@ -1,0 +1,241 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.scroll {
+  height: 100vh;
+  padding-bottom: 60rpx;
+  box-sizing: border-box;
+}
+
+.empty {
+  @include flex-center;
+  padding: 200rpx 0;
+  flex-direction: column;
+}
+
+.emptyText {
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+}
+
+.header {
+  background: $color-bg-card;
+  padding: $spacing-xl $spacing-lg $spacing-lg;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.headerLeft {
+  flex: 1;
+  min-width: 0;
+}
+
+.brandName {
+  display: block;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: 8rpx;
+}
+
+.storeName {
+  display: block;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+}
+
+.metaRow {
+  display: flex;
+  gap: $spacing-xs;
+}
+
+.metaTag {
+  font-size: $font-size-xs;
+  color: $color-tag-text;
+  background: $color-tag-bg;
+  padding: 6rpx 16rpx;
+  border-radius: $radius-xs;
+}
+
+.scoreBadge {
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  @include flex-center;
+  flex-direction: column;
+  flex-shrink: 0;
+  margin-left: $spacing-md;
+}
+
+.scoreText {
+  font-size: 36rpx;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  line-height: 1.1;
+}
+
+.scoreLabel {
+  font-size: $font-size-xs;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4rpx;
+}
+
+.section {
+  background: $color-bg-card;
+  margin: $spacing-md 0;
+  padding: $spacing-lg;
+  border-top: 2rpx solid $color-divider;
+  border-bottom: 2rpx solid $color-divider;
+
+  &:first-of-type {
+    margin-top: $spacing-md;
+  }
+}
+
+.sectionTitle {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
+}
+
+.photoItem {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  border-radius: $radius-sm;
+  overflow: hidden;
+  background: $color-bg-hover;
+}
+
+.photoImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.photoTag {
+  position: absolute;
+  left: $spacing-xs;
+  bottom: $spacing-xs;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+}
+
+.photoTagText {
+  font-size: 20rpx;
+  color: $color-text-white;
+}
+
+.tip {
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: $spacing-sm;
+}
+
+.scoreRow {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.scoreItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.label {
+  width: 140rpx;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.bar {
+  flex: 1;
+  height: 16rpx;
+  background: $color-bg-page;
+  border-radius: $radius-round;
+  overflow: hidden;
+}
+
+.barInner {
+  height: 100%;
+  background: linear-gradient(90deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-round;
+  transition: width $transition-fast;
+}
+
+.value {
+  width: 60rpx;
+  text-align: right;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  flex-shrink: 0;
+}
+
+.card {
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: $spacing-md;
+}
+
+.cardText {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.quoteList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.quoteItem {
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: $spacing-md;
+  display: flex;
+  align-items: flex-start;
+  gap: 8rpx;
+}
+
+.quoteMark {
+  font-size: $font-size-xl;
+  color: $color-primary;
+  line-height: 1;
+  flex-shrink: 0;
+  font-weight: $font-weight-bold;
+}
+
+.quoteText {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: 1.7;
+  font-style: italic;
+}

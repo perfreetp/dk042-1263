@@ -67,7 +67,17 @@ const AssetsPage: React.FC = () => {
         {filteredPhotos.length > 0 ? (
           <View className={styles.photoGrid}>
             {filteredPhotos.map((photo, index) => (
-              <View key={`${photo.observationId}-${index}`} className={styles.photoItem}>
+              <View
+                key={`${photo.observationId}-${index}`}
+                className={styles.photoItem}
+                onClick={() =>
+                  Taro.navigateTo({
+                    url: `/pages/photo-detail/index?observationId=${encodeURIComponent(
+                      photo.observationId
+                    )}&photoUrl=${encodeURIComponent(photo.url)}`,
+                  })
+                }
+              >
                 <Image className={styles.photoImage} src={photo.url} mode='aspectFill' />
                 <View className={styles.photoBrand}>
                   <Text className={styles.photoBrandText}>{photo.brandName}</Text>

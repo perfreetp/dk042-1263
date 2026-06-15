@@ -41,6 +41,7 @@ const ResearchPage: React.FC = () => {
 
   const handleObservationClick = (obs: Observation) => {
     console.info('[Research] Observation clicked:', obs.id);
+    Taro.navigateTo({ url: `/pages/observation-detail/index?id=${obs.id}` });
   };
 
   const handleAddObservation = () => {

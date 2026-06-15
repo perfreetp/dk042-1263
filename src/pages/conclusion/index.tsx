@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, Image } from '@tarojs/components';
+import { View, Text, Image, Textarea } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import classnames from 'classnames';
 import { useAppStore } from '@/store/useAppStore';
 import { mockTeamMembers } from '@/data/members';
 import CompareCard from '@/components/CompareCard';
 import styles from './index.module.scss';
+
+const formatDate = (d: Date) => {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
 
 const ConclusionPage: React.FC = () => {
   const conclusions = useAppStore((state) => state.conclusions);
@@ -15,6 +20,7 @@ const ConclusionPage: React.FC = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [activeConclusionId, setActiveConclusionId] = useState<string | null>(null);
   const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+  const [shareNote, setShareNote] = useState('');
 
   const openShareFlow = (conclusionId?: string) => {
     let targetId = conclusionId;
@@ -28,6 +34,7 @@ const ConclusionPage: React.FC = () => {
     const conclusion = conclusions.find((c) => c.id === targetId);
     setActiveConclusionId(targetId);
     setSelectedMembers(conclusion?.sharedWith ? [...conclusion.sharedWith] : []);
+    setShareNote(conclusion?.shareNote || '');
     setShowShareModal(true);
   };
 
@@ -51,8 +58,15 @@ const ConclusionPage: React.FC = () => {
     }
     const conclusion = conclusions.find((c) => c.id === activeConclusionId);
     const existing = conclusion?.viewedCount ?? 0;
-    updateConclusionShared(activeConclusionId, selectedMembers, Math.max(existing, selectedMembers.length));
-    console.info('[Conclusion] Shared with members:', selectedMembers);
+    const lastSharedAt = formatDate(new Date());
+    updateConclusionShared(
+      activeConclusionId,
+      selectedMembers,
+      Math.max(existing, selectedMembers.length),
+      shareNote,
+      lastSharedAt
+    );
+    console.info('[Conclusion] Shared with members:', selectedMembers, 'note:', shareNote);
     setShowShareModal(false);
     Taro.showToast({ title: '分享成功', icon: 'success' });
   };
@@ -118,12 +132,20 @@ const ConclusionPage: React.FC = () => {
                     })}
                   </View>
                 )}
-                <Text className={styles.shareInfo}>
-                  {conclusion.sharedWith.length > 0
-                    ? `已分享给${conclusion.sharedWith.join('、')} · ${conclusion.viewedCount}人已查看`
-                    : '点击分享给团队'
-                  }
-                </Text>
+                <View className={styles.shareInfoBox}>
+                  <Text className={styles.shareInfo}>
+                    {conclusion.sharedWith.length > 0
+                      ? `已分享给${conclusion.sharedWith.join('、')} · ${conclusion.viewedCount}人已查看`
+                      : '点击分享给团队'
+                    }
+                  </Text>
+                  {conclusion.lastSharedAt && (
+                    <Text className={styles.shareTime}>最近分享 {conclusion.lastSharedAt}</Text>
+                  )}
+                  {conclusion.shareNote && (
+                    <Text className={styles.shareNoteBox}>"{conclusion.shareNote}"</Text>
+                  )}
+                </View>
               </View>
             </View>
           ))
@@ -164,6 +186,18 @@ const ConclusionPage: React.FC = () => {
                   </View>
                 );
               })}
+            </View>
+
+            <View className={styles.shareNoteSection}>
+              <Text className={styles.shareNoteLabel}>分享说明（可选）</Text>
+              <Textarea
+                className={styles.shareNoteInput}
+                value={shareNote}
+                onInput={(e) => setShareNote(e.detail.value)}
+                placeholder='补充说明，例如：请在周会前先看完'
+                maxlength={120}
+                autoHeight
+              />
             </View>
 
             <View className={styles.modalFooter}>

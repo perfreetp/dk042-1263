@@ -68,37 +68,60 @@ const ObservationAddPage: React.FC = () => {
     setUserQuotes(userQuotes.filter((_, i) => i !== index));
   };
 
-  const handleSave = () => {
+  const persistPhotos = async (list: PhotoWithTag[]): Promise<PhotoItem[]> => {
+    const result: PhotoItem[] = [];
+    for (const p of list) {
+      try {
+        const saved = await Taro.saveFile({ tempFilePath: p.url });
+        result.push({ url: saved.savedFilePath, tag: p.tag });
+        console.info('[ObservationAdd] Saved photo:', p.url, '->', saved.savedFilePath);
+      } catch (e) {
+        console.warn('[ObservationAdd] saveFile failed, fallback temp:', e);
+        result.push({ url: p.url, tag: p.tag });
+      }
+    }
+    return result;
+  };
+
+  const handleSave = async () => {
     if (!storeName.trim()) {
       Taro.showToast({ title: '请输入门店名称', icon: 'none' });
       return;
     }
-    const selectedBrand = brands[brandIndex];
-    const fallbackPhotos: PhotoItem[] =
-      photos.length > 0
-        ? photos.map((p) => ({ url: p.url, tag: p.tag }))
-        : TAG_OPTIONS.map((tag) => ({
-            url: `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 100}/300/300`,
-            tag,
-          }));
+    Taro.showLoading({ title: '保存中...', mask: true });
+    try {
+      const selectedBrand = brands[brandIndex];
+      const savedPhotos: PhotoItem[] =
+        photos.length > 0
+          ? await persistPhotos(photos)
+          : TAG_OPTIONS.map((tag) => ({
+              url: `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 100}/300/300`,
+              tag,
+            }));
 
-    const newObs: Observation = {
-      id: `o${Date.now()}`,
-      brandId: selectedBrand.id,
-      brandName: selectedBrand.name,
-      storeName: storeName.trim(),
-      region: region.trim() || '未知',
-      photos: fallbackPhotos,
-      interviewSummary,
-      userQuotes,
-      scores: { sellingPoint, visual, serviceExperience },
-      notes,
-      createdAt: new Date().toISOString().split('T')[0],
-    };
-    addObservation(newObs);
-    console.info('[ObservationAdd] Created:', newObs.id, 'photos:', newObs.photos.length);
-    Taro.showToast({ title: '保存成功', icon: 'success' });
-    setTimeout(() => Taro.navigateBack(), 1500);
+      const newObs: Observation = {
+        id: `o${Date.now()}`,
+        brandId: selectedBrand.id,
+        brandName: selectedBrand.name,
+        storeName: storeName.trim(),
+        region: region.trim() || '未知',
+        photos: savedPhotos,
+        interviewSummary,
+        userQuotes,
+        scores: { sellingPoint, visual, serviceExperience },
+        notes,
+        createdAt: new Date().toISOString().split('T')[0],
+      };
+      addObservation(newObs);
+      console.info('[ObservationAdd] Created:', newObs.id, 'photos:', newObs.photos.length);
+      Taro.hideLoading();
+      Taro.showToast({ title: '保存成功', icon: 'success' });
+      setTimeout(() => Taro.navigateBack(), 1500);
+    } catch (e) {
+      Taro.hideLoading();
+      console.error('[ObservationAdd] Save failed:', e);
+      Taro.showToast({ title: '保存失败', icon: 'none' });
+    }
   };
 
   const adjustScore = (setter: React.Dispatch<React.SetStateAction<number>>, delta: number, current: number) => {

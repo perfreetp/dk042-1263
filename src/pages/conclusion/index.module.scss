@@ -183,7 +183,30 @@
   font-size: $font-size-xs;
   color: $color-text-tertiary;
   @include text-ellipsis;
+}
+
+.shareInfoBox {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.shareTime {
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+}
+
+.shareNoteBox {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  background: rgba(79, 70, 229, 0.08);
+  padding: 6rpx 12rpx;
+  border-radius: $radius-xs;
+  line-height: 1.4;
+  margin-top: 4rpx;
+  @include text-ellipsis;
 }
 
 .emptyState {
@@ -356,4 +379,29 @@
   &:active {
     opacity: 0.9;
   }
+}
+
+.shareNoteSection {
+  padding: $spacing-md $spacing-lg;
+  border-top: 2rpx solid $color-divider;
+}
+
+.shareNoteLabel {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-xs;
+}
+
+.shareNoteInput {
+  width: 100%;
+  min-height: 120rpx;
+  max-height: 240rpx;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  line-height: 1.5;
+  box-sizing: border-box;
 }
