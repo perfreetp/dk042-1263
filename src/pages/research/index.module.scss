@@ -12,6 +12,10 @@
   box-shadow: $shadow-card;
 }
 
+.filterScroll {
+  white-space: nowrap;
+}
+
 .filterRow {
   display: flex;
   gap: $spacing-sm;

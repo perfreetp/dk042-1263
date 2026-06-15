@@ -5,8 +5,6 @@ import { useAppStore } from '@/store/useAppStore';
 import { PhotoItem } from '@/types/observation';
 import styles from './index.module.scss';
 
-const TAGS = ['全部', '货架', '陈列', '海报'];
-
 interface PhotoWithMeta extends PhotoItem {
   brandName: string;
   observationId: string;
@@ -15,6 +13,14 @@ interface PhotoWithMeta extends PhotoItem {
 const AssetsPage: React.FC = () => {
   const observations = useAppStore((state) => state.observations);
   const [activeTag, setActiveTag] = useState('全部');
+
+  const allTags = useMemo(() => {
+    const set = new Set<string>();
+    observations.forEach((obs) => {
+      obs.photos.forEach((p) => p.tag && set.add(p.tag));
+    });
+    return ['全部', ...Array.from(set)];
+  }, [observations]);
 
   const allPhotos = useMemo(() => {
     const photos: PhotoWithMeta[] = [];
@@ -40,7 +46,7 @@ const AssetsPage: React.FC = () => {
       <View className={styles.filterBar}>
         <ScrollView scrollX className={styles.filterScroll}>
           <View className={styles.filterList}>
-            {TAGS.map((tag) => (
+            {allTags.map((tag) => (
               <View
                 key={tag}
                 className={classnames(styles.filterBtn, activeTag === tag && styles.filterBtnActive)}

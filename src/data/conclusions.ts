@@ -11,7 +11,8 @@ export const mockConclusions: Conclusion[] = [
       { brandId: 'b5', brandName: '完美日记', sellingPoint: 6, visual: 7, serviceExperience: 5, priceRange: '¥39-¥169' }
     ],
     createdAt: '2025-06-10',
-    sharedWith: ['张经理', '李设计师']
+    sharedWith: ['张经理', '李设计师'],
+    viewedCount: 2
   },
   {
     id: 'c2',
@@ -23,7 +24,8 @@ export const mockConclusions: Conclusion[] = [
       { brandId: 'b8', brandName: '自嗨锅', sellingPoint: 7, visual: 6, serviceExperience: 5, priceRange: '¥15-¥39' }
     ],
     createdAt: '2025-06-12',
-    sharedWith: ['王总监']
+    sharedWith: ['王总监'],
+    viewedCount: 1
   },
   {
     id: 'c3',
@@ -37,7 +39,8 @@ export const mockConclusions: Conclusion[] = [
       { brandId: 'b4', brandName: '喜茶', sellingPoint: 7, visual: 8, serviceExperience: 6, priceRange: '¥15-¥35' }
     ],
     createdAt: '2025-06-14',
-    sharedWith: ['张经理', '王总监', '李设计师']
+    sharedWith: ['张经理', '王总监', '李设计师'],
+    viewedCount: 3
   },
   {
     id: 'c4',
@@ -50,6 +53,7 @@ export const mockConclusions: Conclusion[] = [
       { brandId: 'b1', brandName: '花西子', sellingPoint: 8, visual: 9, serviceExperience: 7, priceRange: '¥89-¥399' }
     ],
     createdAt: '2025-06-15',
-    sharedWith: ['张经理']
+    sharedWith: ['张经理'],
+    viewedCount: 1
   }
 ];

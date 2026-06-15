@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, Input, Textarea, Picker } from '@tarojs/components';
+import { View, Text, Input, Textarea, Picker, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import classnames from 'classnames';
 import { useAppStore } from '@/store/useAppStore';
-import { Observation } from '@/types/observation';
+import { Observation, PhotoItem } from '@/types/observation';
 import styles from './index.module.scss';
 
 const TAG_OPTIONS = ['货架', '陈列', '海报'];
+
+interface PhotoWithTag extends PhotoItem {
+  localId: string;
+}
 
 const ObservationAddPage: React.FC = () => {
   const brands = useAppStore((state) => state.brands);
@@ -21,8 +26,36 @@ const ObservationAddPage: React.FC = () => {
   const [serviceExperience, setServiceExperience] = useState(5);
   const [userQuotes, setUserQuotes] = useState<string[]>([]);
   const [quoteInput, setQuoteInput] = useState('');
+  const [photos, setPhotos] = useState<PhotoWithTag[]>([]);
 
   const brandNames = brands.map((b) => b.name);
+
+  const handleChooseImages = async () => {
+    try {
+      const res = await Taro.chooseImage({
+        count: 9,
+        sizeType: ['compressed'],
+        sourceType: ['album', 'camera'],
+      });
+      const newPhotos: PhotoWithTag[] = (res.tempFilePaths || []).map((url, idx) => ({
+        url,
+        tag: TAG_OPTIONS[0],
+        localId: `photo-${Date.now()}-${idx}`,
+      }));
+      setPhotos([...photos, ...newPhotos]);
+      console.info('[ObservationAdd] Photos selected:', newPhotos.length);
+    } catch (e) {
+      console.error('[ObservationAdd] Choose image failed:', e);
+    }
+  };
+
+  const handlePhotoTagChange = (localId: string, tag: string) => {
+    setPhotos(photos.map((p) => (p.localId === localId ? { ...p, tag } : p)));
+  };
+
+  const handlePhotoRemove = (localId: string) => {
+    setPhotos(photos.filter((p) => p.localId !== localId));
+  };
 
   const addQuote = () => {
     if (quoteInput.trim()) {
@@ -41,16 +74,21 @@ const ObservationAddPage: React.FC = () => {
       return;
     }
     const selectedBrand = brands[brandIndex];
+    const fallbackPhotos: PhotoItem[] =
+      photos.length > 0
+        ? photos.map((p) => ({ url: p.url, tag: p.tag }))
+        : TAG_OPTIONS.map((tag) => ({
+            url: `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 100}/300/300`,
+            tag,
+          }));
+
     const newObs: Observation = {
       id: `o${Date.now()}`,
       brandId: selectedBrand.id,
       brandName: selectedBrand.name,
       storeName: storeName.trim(),
       region: region.trim() || '未知',
-      photos: TAG_OPTIONS.map((tag) => ({
-        url: `https://picsum.photos/id/${Math.floor(Math.random() * 200) + 100}/300/300`,
-        tag,
-      })),
+      photos: fallbackPhotos,
       interviewSummary,
       userQuotes,
       scores: { sellingPoint, visual, serviceExperience },
@@ -58,7 +96,7 @@ const ObservationAddPage: React.FC = () => {
       createdAt: new Date().toISOString().split('T')[0],
     };
     addObservation(newObs);
-    console.info('[ObservationAdd] Created:', newObs.id);
+    console.info('[ObservationAdd] Created:', newObs.id, 'photos:', newObs.photos.length);
     Taro.showToast({ title: '保存成功', icon: 'success' });
     setTimeout(() => Taro.navigateBack(), 1500);
   };
@@ -90,6 +128,41 @@ const ObservationAddPage: React.FC = () => {
         <View className={styles.formCard}>
           <Text className={styles.formLabel}>地区</Text>
           <Input className={styles.formInput} value={region} onInput={(e) => setRegion(e.detail.value)} placeholder='如：杭州' />
+        </View>
+
+        <View className={styles.formCard}>
+          <Text className={styles.formLabel}>拍摄照片</Text>
+          <View className={styles.photoGrid}>
+            {photos.map((photo) => (
+              <View key={photo.localId} className={styles.photoItem}>
+                <Image className={styles.photoImage} src={photo.url} mode='aspectFill' />
+                <View className={styles.photoRemove} onClick={() => handlePhotoRemove(photo.localId)}>
+                  <Text className={styles.photoRemoveText}>×</Text>
+                </View>
+                <View className={styles.photoTagBar}>
+                  {TAG_OPTIONS.map((tag) => (
+                    <View
+                      key={tag}
+                      className={classnames(
+                        styles.photoTagOption,
+                        photo.tag === tag && styles.photoTagOptionActive
+                      )}
+                      onClick={() => handlePhotoTagChange(photo.localId, tag)}
+                    >
+                      <Text>{tag}</Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            ))}
+            {photos.length < 9 && (
+              <View className={styles.photoAdd} onClick={handleChooseImages}>
+                <Text className={styles.photoAddText}>+</Text>
+                <Text className={styles.photoAddLabel}>拍照/相册</Text>
+              </View>
+            )}
+          </View>
+          <Text className={styles.photoHint}>每张照片点击下方标签可切换（货架/陈列/海报）</Text>
         </View>
 
         <View className={styles.formCard}>

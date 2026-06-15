@@ -1,34 +1,69 @@
-import React from 'react';
-import { View, Text } from '@tarojs/components';
+import React, { useState } from 'react';
+import { View, Text, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import classnames from 'classnames';
 import { useAppStore } from '@/store/useAppStore';
+import { mockTeamMembers } from '@/data/members';
 import CompareCard from '@/components/CompareCard';
 import styles from './index.module.scss';
 
 const ConclusionPage: React.FC = () => {
   const conclusions = useAppStore((state) => state.conclusions);
   const brands = useAppStore((state) => state.brands);
+  const updateConclusionShared = useAppStore((state) => state.updateConclusionShared);
+
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [activeConclusionId, setActiveConclusionId] = useState<string | null>(null);
+  const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+
+  const openShareFlow = (conclusionId?: string) => {
+    let targetId = conclusionId;
+    if (!targetId && conclusions.length > 0) {
+      targetId = conclusions[conclusions.length - 1].id;
+    }
+    if (!targetId) {
+      Taro.showToast({ title: '暂无可分享的结论', icon: 'none' });
+      return;
+    }
+    const conclusion = conclusions.find((c) => c.id === targetId);
+    setActiveConclusionId(targetId);
+    setSelectedMembers(conclusion?.sharedWith ? [...conclusion.sharedWith] : []);
+    setShowShareModal(true);
+  };
 
   const handleCompare = () => {
     Taro.navigateTo({ url: '/pages/compare/index' });
   };
 
-  const handleShare = (conclusionId: string) => {
-    Taro.showModal({
-      title: '分享结论',
-      content: '确认将此结论分享给团队成员？',
-      success: (res) => {
-        if (res.confirm) {
-          console.info('[Conclusion] Shared:', conclusionId);
-          Taro.showToast({ title: '已分享', icon: 'success' });
-        }
-      },
-    });
+  const toggleMember = (name: string) => {
+    if (selectedMembers.includes(name)) {
+      setSelectedMembers(selectedMembers.filter((n) => n !== name));
+    } else {
+      setSelectedMembers([...selectedMembers, name]);
+    }
+  };
+
+  const confirmShare = () => {
+    if (!activeConclusionId) return;
+    if (selectedMembers.length === 0) {
+      Taro.showToast({ title: '请选择团队成员', icon: 'none' });
+      return;
+    }
+    const conclusion = conclusions.find((c) => c.id === activeConclusionId);
+    const existing = conclusion?.viewedCount ?? 0;
+    updateConclusionShared(activeConclusionId, selectedMembers, Math.max(existing, selectedMembers.length));
+    console.info('[Conclusion] Shared with members:', selectedMembers);
+    setShowShareModal(false);
+    Taro.showToast({ title: '分享成功', icon: 'success' });
   };
 
   const getBrandName = (brandId: string) => {
     return brands.find((b) => b.id === brandId)?.name || '';
   };
+
+  const activeConclusion = activeConclusionId
+    ? conclusions.find((c) => c.id === activeConclusionId)
+    : null;
 
   return (
     <View className={styles.page}>
@@ -45,7 +80,7 @@ const ConclusionPage: React.FC = () => {
           <Text className={styles.actionTitle}>竞品对比</Text>
           <Text className={styles.actionDesc}>生成对比卡片</Text>
         </View>
-        <View className={styles.actionCard} onClick={() => {}}>
+        <View className={styles.actionCard} onClick={() => openShareFlow()}>
           <View className={`${styles.actionIcon} ${styles.actionIconShare}`}>
             <Text className={styles.actionIconText}>📤</Text>
           </View>
@@ -59,7 +94,7 @@ const ConclusionPage: React.FC = () => {
       <View className={styles.conclusionList}>
         {conclusions.length > 0 ? (
           conclusions.map((conclusion) => (
-            <View key={conclusion.id} className={styles.conclusionCard} onClick={() => handleShare(conclusion.id)}>
+            <View key={conclusion.id} className={styles.conclusionCard} onClick={() => openShareFlow(conclusion.id)}>
               <View className={styles.conclusionHeader}>
                 <Text className={styles.conclusionTitle}>{conclusion.title}</Text>
                 <Text className={styles.conclusionDate}>{conclusion.createdAt}</Text>
@@ -71,7 +106,24 @@ const ConclusionPage: React.FC = () => {
                     <Text key={bid} className={styles.brandTag}>{getBrandName(bid)}</Text>
                   ))}
                 </View>
-                <Text className={styles.shareInfo}>{conclusion.sharedWith.length}人已查看</Text>
+              </View>
+              <View className={styles.conclusionShareRow}>
+                {conclusion.sharedWith.length > 0 && (
+                  <View className={styles.avatars}>
+                    {conclusion.sharedWith.slice(0, 3).map((name) => {
+                      const member = mockTeamMembers.find((m) => m.name === name);
+                      return member ? (
+                        <Image key={name} className={styles.avatar} src={member.avatar} mode='aspectFill' />
+                      ) : null;
+                    })}
+                  </View>
+                )}
+                <Text className={styles.shareInfo}>
+                  {conclusion.sharedWith.length > 0
+                    ? `已分享给${conclusion.sharedWith.join('、')} · ${conclusion.viewedCount}人已查看`
+                    : '点击分享给团队'
+                  }
+                </Text>
               </View>
             </View>
           ))
@@ -81,6 +133,50 @@ const ConclusionPage: React.FC = () => {
           </View>
         )}
       </View>
+
+      {showShareModal && (
+        <View className={styles.modalMask} onClick={() => setShowShareModal(false)}>
+          <View className={styles.modal} onClick={(e) => e.stopPropagation?.()}>
+            <View className={styles.modalHeader}>
+              <Text className={styles.modalTitle}>分享给团队成员</Text>
+              <Text className={styles.modalSubTitle}>
+                {activeConclusion ? `结论：${activeConclusion.title}` : ''}
+              </Text>
+            </View>
+
+            <View className={styles.memberList}>
+              {mockTeamMembers.map((member) => {
+                const checked = selectedMembers.includes(member.name);
+                return (
+                  <View
+                    key={member.id}
+                    className={classnames(styles.memberItem, checked && styles.memberItemActive)}
+                    onClick={() => toggleMember(member.name)}
+                  >
+                    <Image className={styles.memberAvatar} src={member.avatar} mode='aspectFill' />
+                    <View className={styles.memberInfo}>
+                      <Text className={styles.memberName}>{member.name}</Text>
+                      <Text className={styles.memberRole}>{member.role}</Text>
+                    </View>
+                    <View className={classnames(styles.checkbox, checked && styles.checkboxChecked)}>
+                      {checked && <Text className={styles.checkIcon}>✓</Text>}
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+
+            <View className={styles.modalFooter}>
+              <View className={styles.cancelShareBtn} onClick={() => setShowShareModal(false)}>
+                <Text>取消</Text>
+              </View>
+              <View className={styles.confirmShareBtn} onClick={confirmShare}>
+                <Text>确认分享（{selectedMembers.length}）</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

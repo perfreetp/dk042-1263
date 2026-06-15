@@ -15,4 +15,5 @@ export interface Conclusion {
   comparisonData: ComparisonItem[];
   createdAt: string;
   sharedWith: string[];
+  viewedCount: number;
 }

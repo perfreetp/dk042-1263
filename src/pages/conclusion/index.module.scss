@@ -135,6 +135,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: $spacing-sm;
 }
 
 .brandTags {
@@ -154,11 +155,35 @@
   white-space: nowrap;
 }
 
+.conclusionShareRow {
+  display: flex;
+  align-items: center;
+  padding-top: $spacing-md;
+  border-top: 2rpx solid $color-divider;
+  gap: $spacing-sm;
+}
+
+.avatars {
+  display: flex;
+}
+
+.avatar {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: $radius-round;
+  border: 2rpx solid $color-bg-card;
+  margin-left: -12rpx;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
 .shareInfo {
   font-size: $font-size-xs;
   color: $color-text-tertiary;
-  white-space: nowrap;
-  margin-left: $spacing-sm;
+  @include text-ellipsis;
+  flex: 1;
 }
 
 .emptyState {
@@ -170,4 +195,165 @@
 .emptyText {
   font-size: $font-size-md;
   color: $color-text-tertiary;
+}
+
+.modalMask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  @include flex-center;
+}
+
+.modal {
+  width: 640rpx;
+  max-height: 80vh;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-popup;
+}
+
+.modalHeader {
+  padding: $spacing-lg;
+  border-bottom: 2rpx solid $color-divider;
+}
+
+.modalTitle {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.modalSubTitle {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  @include text-ellipsis;
+}
+
+.memberList {
+  flex: 1;
+  padding: $spacing-md $spacing-lg;
+  overflow-y: auto;
+  max-height: 600rpx;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-divider;
+  transition: all $transition-fast;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.memberItemActive {
+  background: $color-tag-bg;
+  margin: 0 (-$spacing-md);
+  padding: $spacing-md $spacing-md;
+  border-radius: $radius-sm;
+  border-bottom: none;
+  margin-bottom: $spacing-sm;
+}
+
+.memberAvatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: $radius-round;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.memberInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.memberName {
+  display: block;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.memberRole {
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: $radius-round;
+  border: 2rpx solid $color-border;
+  background: $color-bg-card;
+  @include flex-center;
+  transition: all $transition-fast;
+  flex-shrink: 0;
+}
+
+.checkboxChecked {
+  background: $color-primary;
+  border-color: $color-primary;
+}
+
+.checkIcon {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+}
+
+.modalFooter {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  border-top: 2rpx solid $color-divider;
+}
+
+.cancelShareBtn {
+  @include button-reset;
+  width: 200rpx;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: $color-bg-page;
+  border: 2rpx solid $color-border;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.confirmShareBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  font-size: $font-size-md;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    opacity: 0.9;
+  }
 }
