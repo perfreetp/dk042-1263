@@ -1,0 +1,120 @@
+@use '@/styles/variables.scss' as *;
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+
+  &:active {
+    opacity: 0.9;
+    transform: scale(0.98);
+    transition: all $transition-base;
+  }
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.brandInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.brandName {
+  display: block;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.storeName {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  @include text-ellipsis;
+}
+
+.scoreBadge {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-sm;
+  padding: 6rpx 16rpx;
+  margin-left: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.scoreText {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.region, .date, .photoCount {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.dot {
+  font-size: $font-size-xs;
+  color: $color-text-disabled;
+  margin: 0 6rpx;
+}
+
+.summary {
+  display: block;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  line-height: $line-height-loose;
+  @include text-ellipsis-multi(2);
+  margin-bottom: $spacing-md;
+}
+
+.scores {
+  display: flex;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.scoreItem {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.scoreLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.scoreValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+}
+
+.quote {
+  background: $color-tag-bg;
+  border-radius: $radius-sm;
+  padding: $spacing-sm $spacing-md;
+}
+
+.quoteText {
+  font-size: $font-size-sm;
+  color: $color-tag-text;
+  font-style: italic;
+  line-height: $line-height-loose;
+  @include text-ellipsis-multi(1);
+}

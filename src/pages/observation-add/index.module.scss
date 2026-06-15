@@ -1,0 +1,230 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  background: $color-bg-page;
+  padding-bottom: 160rpx;
+}
+
+.formSection {
+  padding: $spacing-lg $page-padding;
+}
+
+.formCard {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.formLabel {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+}
+
+.formRequired {
+  color: $color-error;
+  margin-left: 4rpx;
+}
+
+.formInput {
+  width: 100%;
+  height: 80rpx;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: 0 $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  border: 2rpx solid $color-border;
+  box-sizing: border-box;
+}
+
+.formTextarea {
+  width: 100%;
+  min-height: 160rpx;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  border: 2rpx solid $color-border;
+  box-sizing: border-box;
+  line-height: $line-height-loose;
+}
+
+.scoreRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.scoreLabel {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.scoreControl {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.scoreBtn {
+  @include button-reset;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: $radius-round;
+  background: $color-bg-page;
+  border: 2rpx solid $color-border;
+  font-size: $font-size-lg;
+  color: $color-text-secondary;
+
+  &:active {
+    background: $color-tag-bg;
+    border-color: $color-primary;
+  }
+}
+
+.scoreValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  min-width: 48rpx;
+  text-align: center;
+}
+
+.quoteInputRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-sm;
+}
+
+.quoteInput {
+  flex: 1;
+  height: 72rpx;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: 0 $spacing-md;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  border: 2rpx solid $color-border;
+  box-sizing: border-box;
+}
+
+.addQuoteBtn {
+  @include button-reset;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-sm;
+  background: $color-primary;
+  border: none;
+  flex-shrink: 0;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.addQuoteBtnText {
+  font-size: $font-size-xl;
+  color: $color-text-white;
+  font-weight: $font-weight-normal;
+}
+
+.quoteList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+}
+
+.quoteItem {
+  background: $color-tag-bg;
+  border-radius: $radius-sm;
+  padding: $spacing-sm $spacing-md;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quoteText {
+  font-size: $font-size-sm;
+  color: $color-tag-text;
+  flex: 1;
+  @include text-ellipsis;
+}
+
+.quoteRemove {
+  font-size: $font-size-md;
+  color: $color-error;
+  margin-left: $spacing-sm;
+}
+
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-bg-card;
+  padding: $spacing-md $page-padding;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: $spacing-md;
+}
+
+.saveBtn {
+  @include button-reset;
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border: none;
+  font-size: $font-size-lg;
+  color: $color-text-white;
+  font-weight: $font-weight-semibold;
+
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+.cancelBtn {
+  @include button-reset;
+  width: 200rpx;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  background: $color-bg-page;
+  border: 2rpx solid $color-border;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.pickerRow {
+  display: flex;
+  align-items: center;
+}
+
+.pickerBtn {
+  @include button-reset;
+  width: 100%;
+  height: 80rpx;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  padding: 0 $spacing-md;
+  border: 2rpx solid $color-border;
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  justify-content: flex-start;
+}
+
+.pickerValue {
+  color: $color-text-primary;
+}
