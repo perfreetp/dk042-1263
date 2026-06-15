@@ -242,6 +242,12 @@
   box-shadow: $shadow-popup;
 }
 
+.modalScroll {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
 .modalHeader {
   padding: $spacing-lg;
   border-bottom: 2rpx solid $color-divider;
@@ -404,4 +410,99 @@
   color: $color-text-primary;
   line-height: 1.5;
   box-sizing: border-box;
+}
+
+.historySection {
+  padding: $spacing-lg;
+  background: $color-bg-page;
+  border-radius: $radius-sm;
+  margin-top: $spacing-md;
+}
+
+.historyHeader {
+  margin-bottom: $spacing-sm;
+}
+
+.historyTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.historyItem {
+  background: $color-bg-card;
+  border-radius: $radius-sm;
+  padding: $spacing-sm;
+  display: flex;
+  gap: $spacing-sm;
+  align-items: flex-start;
+}
+
+.historyAvatars {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.historyAvatar {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  border: 2rpx solid $color-bg-card;
+  margin-left: -10rpx;
+  background: $color-bg-hover;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.historyAvatarMore {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: $radius-round;
+  background: $color-border;
+  @include flex-center;
+  margin-left: -10rpx;
+  margin-left: 0;
+}
+
+.historyAvatarMoreText {
+  font-size: 18rpx;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+}
+
+.historyInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.historyMembers {
+  display: block;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  @include text-ellipsis;
+}
+
+.historyTime {
+  display: block;
+  font-size: 20rpx;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+}
+
+.historyNote {
+  display: block;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  margin-top: 6rpx;
+  line-height: 1.4;
+  @include text-ellipsis-multi(2);
 }

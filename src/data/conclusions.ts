@@ -12,7 +12,11 @@ export const mockConclusions: Conclusion[] = [
     ],
     createdAt: '2025-06-10',
     sharedWith: ['张经理', '李设计师'],
-    viewedCount: 2
+    viewedCount: 2,
+    lastSharedAt: '2025-06-10 14:30',
+    shareHistory: [
+      { sharedWith: ['张经理', '李设计师'], shareNote: '请两位周三前给反馈', sharedAt: '2025-06-10 14:30' }
+    ]
   },
   {
     id: 'c2',
@@ -25,7 +29,11 @@ export const mockConclusions: Conclusion[] = [
     ],
     createdAt: '2025-06-12',
     sharedWith: ['王总监'],
-    viewedCount: 1
+    viewedCount: 1,
+    lastSharedAt: '2025-06-12 10:12',
+    shareHistory: [
+      { sharedWith: ['王总监'], shareNote: '渠道策略讨论参考', sharedAt: '2025-06-12 10:12' }
+    ]
   },
   {
     id: 'c3',
@@ -40,7 +48,11 @@ export const mockConclusions: Conclusion[] = [
     ],
     createdAt: '2025-06-14',
     sharedWith: ['张经理', '王总监', '李设计师'],
-    viewedCount: 3
+    viewedCount: 3,
+    lastSharedAt: '2025-06-14 16:45',
+    shareHistory: [
+      { sharedWith: ['张经理', '王总监', '李设计师'], shareNote: '全员讨论下周一例会', sharedAt: '2025-06-14 16:45' }
+    ]
   },
   {
     id: 'c4',
@@ -54,6 +66,10 @@ export const mockConclusions: Conclusion[] = [
     ],
     createdAt: '2025-06-15',
     sharedWith: ['张经理'],
-    viewedCount: 1
+    viewedCount: 1,
+    lastSharedAt: '2025-06-15 09:20',
+    shareHistory: [
+      { sharedWith: ['张经理'], sharedAt: '2025-06-15 09:20' }
+    ]
   }
 ];

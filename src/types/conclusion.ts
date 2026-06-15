@@ -7,6 +7,12 @@ export interface ComparisonItem {
   priceRange: string;
 }
 
+export interface ShareRecord {
+  sharedWith: string[];
+  shareNote?: string;
+  sharedAt: string;
+}
+
 export interface Conclusion {
   id: string;
   title: string;
@@ -18,4 +24,5 @@ export interface Conclusion {
   viewedCount: number;
   shareNote?: string;
   lastSharedAt?: string;
+  shareHistory: ShareRecord[];
 }
